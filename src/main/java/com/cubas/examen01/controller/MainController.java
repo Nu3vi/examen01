@@ -7,6 +7,7 @@ public class MainController {
     public String home() {
         return "index";
     }
+
     @GetMapping("/eventos")
     public String eventos() {
         return "eventos";

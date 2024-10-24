@@ -1,4 +1,4 @@
-const url = "/v1/eventos";
+const url = "/v1/categorias";
 
 function ajaxRequest(type, endpoint, data = null) {
     return $.ajax({
@@ -17,10 +17,7 @@ function save(bandera) {
     const registro = {
         id,
         nombre: $("#nombre").val(),
-        tipoDocumento: $("#tipoDocumento").val(),
-        numeroDocumento: $("#numeroDocumento").val(),
-        telefono: $("#telefono").val(),
-        email: $("#email").val()
+        descripcion: $("#descripcion").val(),
     };
 
     const type = bandera === 1 ? "POST" : "PUT";
@@ -90,15 +87,7 @@ function getTabla() {
                         <button type="button" class="btn btn-danger btn-xs eliminar">
                             <i class="fas fa-trash"></i>
                         </button>`;
-						t.row.add([
-						    botonera, 
-						    registro.id, 
-						    registro.nombre, 
-						    registro.tipoDocumento, 
-						    registro.numeroDocumento, 
-						    registro.telefono, 
-						    registro.email
-						]);
+                    t.row.add([botonera, registro.id, registro.nombre, registro.descripcion]);
                 });
                 t.draw(false);
             } else {
@@ -112,12 +101,9 @@ function getFila(id) {
     ajaxRequest("GET", `${url}/${id}`)
         .done((data) => {
             if (data.ok) {
-                $("#modal-title").text("Editar Cliente");
+                $("#modal-title").text("Editar registro");
                 $("#nombre").val(data.body.nombre);
-                $("#tipoDocumento").val(data.body.tipoDocumento);
-                $("#numeroDocumento").val(data.body.numeroDocumento);
-                $("#telefono").val(data.body.telefono);
-                $("#email").val(data.body.email);
+                $("#descripcion").val(data.body.descripcion);
                 $("#guardar").data("id", data.body.id).data("bandera", 0);
                 $("#modal-update").modal("show");
             } else {
@@ -128,13 +114,10 @@ function getFila(id) {
 }
 
 function clear() {
-    $("#modal-title").text("Nuevo Cliente");
+    $("#modal-title").text("Nuevo registro");
     $("#nombre").val("");
-    $("#tipoDocumento").val("");
-    $("#numeroDocumento").val("");
-    $("#telefono").val("");
-    $("#email").val("");
-    $("#guardar").data("id", 0).data("bandera", 1); // Bandera para indicar que es un nuevo registro
+    $("#descripcion").val("");
+    $("#guardar").data("id", 0).data("bandera", 1);
 }
 
 function handleError(jqXHR) {
@@ -155,7 +138,6 @@ $(document).ready(function () {
             info: "Mostrando del _START_ al _END_ de _TOTAL_ registros",
             infoEmpty: "Sin resultados",
             search: "Buscar: ",
-
             paginate: {
                 first: "Primero",
                 last: "Último",
@@ -164,14 +146,14 @@ $(document).ready(function () {
             },
         },
         columnDefs: [
-            { targets: 0, orderable: false }
+            { targets: 0, orderable: false}
         ],
     });
 
     clear();
 
     $("#nuevo").click(clear);
-
+    
     $("#guardar").click(() => save($("#guardar").data("bandera")));
 
     $(document).on('click', '.eliminar', function () {
@@ -197,8 +179,8 @@ $(document).ready(function () {
     });
 
     getTabla();
-
+	
 	$('#liAlmacen').addClass("menu-open");
-	$('#liEventos').addClass("active");
+	$('#liCategoria').addClass("active");
 
 });
